@@ -36,7 +36,7 @@ apca.default <- function(data, tots = NULL,
 		dat <- adj1$dat
 	}	
 		
-	if(class(dat[, 1]) != "Date") {
+	if(class(data[, 1]) != "Date") {
 		stop("First column must be 'date'")
 	}
 		
@@ -68,7 +68,10 @@ apca.default <- function(data, tots = NULL,
 	apca$nsources <- nsources
 	apca$call <- match.call()
 	
-	apca$adjust <- adj1
+
+	if(!is.null(adjust)) {
+		apca$adjust <- adj1
+	}	
 
 	class(apca) <- "apca"
 	apca
