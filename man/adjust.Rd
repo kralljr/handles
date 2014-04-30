@@ -11,7 +11,7 @@ adjust(x, ...)
   \item{mdl}{vector or matrix of MDLs for each variable of
   data}
 
-  \item{method}{one of three methods.  'substitute'
+  \item{adjust}{one of three methods.  'substitute'
   substitutes all censored constant proportion of the mdl
   (sub * mdl).  'exclude' excludes constituents with more
   than experc censored data.  'likelihood' multiply imputes
