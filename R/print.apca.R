@@ -58,12 +58,12 @@ plot.apca <- function(x, plot = "prof", names = NULL,
 		}
 		
 		#either print subset (if # dates > 200)
-		if(nrow(conc) > 200 & is.null(dates)) {
+		if(nrow(conc) > 200 & is.null(dates1)) {
 			print("Plotting first 200 days")
 			conc <- conc[1 : 200, ]
 			dates <- dates[1: 200]
 		#or dates are specified in function call
-		}else{
+		}else if(!is.null(dates1)){
 			whD <- which(dates %in% dates1)
 			dates <- dates[whD]
 			conc <- conc[whD, ]
@@ -78,6 +78,7 @@ plot.apca <- function(x, plot = "prof", names = NULL,
 			axis.Date(1, dates, las = 2, format = "%m/%Y")
 			axis(2)
 			box()
+			abline(h = 0, col = "blue", lty = 2)
 			}
 		
 	}
