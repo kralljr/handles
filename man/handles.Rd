@@ -2,10 +2,8 @@
 \name{handles}
 \alias{handles}
 \alias{handles-package}
-\title{handles.}
+\title{HANdles Detection Limits when Estimating Sources}
 \description{
-handles.
-
 handles helps users estimate sources of PM2.5 with censored
 data below minimum detection limits (MDL) by first
 adjusting censored PM2.5 constituent concentrations and
