@@ -44,4 +44,7 @@ chemical constituents.
 adjust(nycdat, )
 apca(nycdat, mdl = mdls, adjust = "substitute")
 }
+\seealso{
+Other adjust1: \code{\link{print.adjust}}
+}
 
