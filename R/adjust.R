@@ -20,14 +20,13 @@
 #' @examples
 #' data(nycdat)
 #' data(nycmdl)
-#' adjust(nycdat, mdl = mdls, method = "substitute", sub = 1/sqrt(2))
-#' adjust(nycdat, mdl = mdls, method = "exclude", experc = 0.2)
-#' adjust(nycdat, mdl = mdls, method = "likelihood")
+#' adjust(nycdat, mdl = nycmdl, method = "substitute", sub = 1/sqrt(2))
+#' adjust(nycdat, mdl = nycmdl, method = "exclude", experc = 0.2)
+#' adjust(nycdat, mdl = nycmdl, method = "likelihood")
 adjust <- function(x, ...) UseMethod("adjust")
 
 
-
-
+#' @rdname adjust
 #' @export
 adjust.default <- function(data, mdl, 
 	adjust = c("substitute", "exclude", "likelihood"),
@@ -97,7 +96,7 @@ adjust.default <- function(data, mdl,
 
 
 
-
+#' @rdname adjust
 #' @export
 print.adjust <- function(x) {
 	cat("Call:\n")

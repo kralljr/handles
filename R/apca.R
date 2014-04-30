@@ -23,6 +23,7 @@
 #' apca(nycdat, mdl = nycmdl, adjust = "substitute")
 apca <- function(x, ...) UseMethod("apca")
 
+#' @rdname apca
 #' @export
 apca.default <- function(data, tots = NULL,
 	nsources = NULL, adjust = NULL,  

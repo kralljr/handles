@@ -1,8 +1,12 @@
 \name{apca}
 \alias{apca}
+\alias{apca.default}
 \title{Absolute Principal Component Analysis (APCA)}
 \usage{
 apca(x, ...)
+
+\method{apca}{default}(data, tots = NULL, nsources = NULL, adjust = NULL,
+  mdl = NULL, ...)
 }
 \arguments{
   \item{data}{data frame of daily constituent
