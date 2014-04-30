@@ -12,4 +12,3 @@ Description: handles helps users adjust censored PM2.5 constituent
 Depends:
     R (>= 3.0.2)
 License: What license is it under?
-LazyData: true
