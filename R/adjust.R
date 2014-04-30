@@ -77,13 +77,13 @@ adjust.default <- function(data, mdl,
 		guess[[1]] <- dat
 		guess[[2]] <- colMeans(dat)
 		guess[[3]] <- cov(dat)
-		adjust <- lhood(dat, mdl, guess, burnin, N)
-		out$impmean <- adjust$gthet
-		out$impcov <- adjust$gsig
-		out$impdat <- adjust$gymiss
+		lhood1 <- lhood(dat, mdl, guess, burnin, N)
+		out$impmean <- lhood1$gthet
+		out$impcov <- lhood1$gsig
+		out$impdat <- lhood1$gymiss
 		out$burnin <- burnin
 		out$N <- N
-		dat1 <- apply(adjust$gymiss, c(1, 2), mean, na.rm = T)
+		dat1 <- apply(lhood1$gymiss, c(1, 2), mean, na.rm = T)
 	}
 	
 	dat1 <- data.frame(dates, dat1)
