@@ -30,7 +30,7 @@ apca.default <- function(data, tots = NULL,
 		
 	if(!is.null(adjust)) {
 		adj1 <- adjust(data = data, mdl = mdl, 
-			method = adjust, ...)
+			adjust = adjust, ...)
 		dat <- adj1$dat
 	}	
 		
@@ -42,24 +42,24 @@ apca.default <- function(data, tots = NULL,
 	data <- data[, -1]	
 		
 	#standardize data (mean zero, sd 1)
-	stddata <- stdize1(data, ...)
+	stddata <- stdize1(data)
 	
 	#Use PC method to get number of sources
 	if(is.null(nsources)) {
-		pr1 <- prcomp(stddata, ...)
+		pr1 <- prcomp(stddata)
 		nsources <- length(which(pr1$sdev > 1))
 	}
 		
 	#get scores and rotation matrix bstar	
 	temp <- getbstar(stddata = stddata, nsources = nsources, 
-		dates = dates, ...)
+		dates = dates)
 	scores <- temp$scores
 	bstar <- temp$bstar
 	vmax <- temp$vmax
 
 	#use regressions to obtain source profiles and source concentrations
 	apca <- getscoresprofs(data = data, bstar = bstar, 
-		scores = scores, tots = tots, dates = dates, ...) 
+		scores = scores, tots = tots, dates = dates) 
 
 	apca$vmax <- vmax
 	apca$dates <- dates
@@ -83,15 +83,15 @@ apca.default <- function(data, tots = NULL,
 	
 #### function to standardize data: mean 0, var 1
 # dat is data matrix T (ndays) X P (nconstituents)
-stdize1 <- function(data, ...) {
+stdize1 <- function(data) {
 	
 	#get means and sd
-	cm <- colMeans(data, na.rm = T, ...)
-	sds <- apply(data, 2, sd, na.rm = T, ...)
+	cm <- colMeans(data, na.rm = T)
+	sds <- apply(data, 2, sd, na.rm = T)
 	
 	#standardize
-	data <- sweep(data, 2, cm, ...)
-	data <- sweep(data, 2, sds, "/", ...)
+	data <- sweep(data, 2, cm)
+	data <- sweep(data, 2, sds, "/")
 	
 	#eliminate divide by zero
 	wh0 <- which(sds == 0)
@@ -109,23 +109,23 @@ stdize1 <- function(data, ...) {
 #get factor rotation and scores
 #datasc is centered and scaled data
 #nsource is number of sources
-getbstar <- function(stddata, nsources, dates, ...) {
+getbstar <- function(stddata, nsources, dates) {
 		
 	#perform PCA
-	pc1 <- prcomp(stddata, ...)
+	pc1 <- prcomp(stddata)
 	#get eigenvectors scaled by sdev
-	rots <- sweep(pc1$rot, 2, pc1$sdev, "*", ...)
+	rots <- sweep(pc1$rot, 2, pc1$sdev, "*")
 	
 	#apply varimax rotation
-	vmax <- varimax(rots[, 1 : nsources], normalize = T, ...)
-	bstar1 <- as.matrix(vmax[[1]][1 : ncol(stddata), ], ...)
+	vmax <- varimax(rots[, 1 : nsources], normalize = T)
+	bstar1 <- as.matrix(vmax[[1]][1 : ncol(stddata), ])
 	
 	#get uncorrelated factors and scores
 
 	#inverse correlation matrix
-	scor <- chol2inv(chol(cor(stddata, ...), ...), ...)
+	scor <- chol2inv(chol(cor(stddata)))
 	bstar <- scor %*% bstar1
-	scores <- as.matrix(stddata, ...) %*% bstar
+	scores <- as.matrix(stddata) %*% bstar
 	
 	rownames(scores) <- dates
 
@@ -140,7 +140,7 @@ getbstar <- function(stddata, nsources, dates, ...) {
 
 
 
-getscoresprofs <- function(data, bstar, scores, tots, dates, ...) {
+getscoresprofs <- function(data, bstar, scores, tots, dates) {
 
 	scores1 <- scores
 	
@@ -149,7 +149,7 @@ getscoresprofs <- function(data, bstar, scores, tots, dates, ...) {
 	nsources <- ncol(scores)
 	
 	#get pollution-free day
-	pc0 <- abzero(data, bstar[, cc], ...)
+	pc0 <- abzero(data, bstar[, cc])
 
 	#compute absolute principal component scores
 	apcs <- sweep(scores, 2, pc0)
@@ -161,13 +161,13 @@ getscoresprofs <- function(data, bstar, scores, tots, dates, ...) {
 	}
 		
 	#get source concentrations	
-	reg1 <- lm(tots ~ apcs, ...)
+	reg1 <- lm(tots ~ apcs)
 	
 	
 	#unexplained sources
 	leftover <- reg1$coef[1]
 	betas <- reg1$coef[-1]
-	conc1 <- sweep(apcs, 2, betas, "*", ...)
+	conc1 <- sweep(apcs, 2, betas, "*")
 
 
 	#get source profiles
@@ -215,16 +215,16 @@ getscoresprofs <- function(data, bstar, scores, tots, dates, ...) {
 #Get rotated pollution-free day
 #data is uncentered data
 #bstar is factor matrix
-abzero <- function(data, bstar, ...){
+abzero <- function(data, bstar){
 	
 	#find column means and sd
-	colm <- apply(data, 2, mean, na.rm = T, ...)
-	colsd <- apply(data, 2, sd, na.rm = T, ...)
+	colm <- apply(data, 2, mean, na.rm = T)
+	colsd <- apply(data, 2, sd, na.rm = T)
 	
 	#zero pollution day
 	z0 <- -colm / colsd
 	
-	whNAN <- which(is.nan(z0), ...)
+	whNAN <- which(is.nan(z0))
 	if(length(whNAN) > 0) {
 		z0 <- z0[-whNAN]
 	}
@@ -238,7 +238,7 @@ abzero <- function(data, bstar, ...){
 
 
 #' @export
-print.apca <- function(x, ...) {
+print.apca <- function(x) {
 	cat("Call:\n")
 	print(x$call)
 	cat("Profiles:\n")
@@ -261,7 +261,7 @@ summary.apca <- function(x, ...) {
 }
 
 #' @export
-print.summary.apca <- function(x, ...) {
+print.summary.apca <- function(x) {
 	cat("Call:\n")
 	print(x$call)
 	cat("\n")
@@ -274,7 +274,7 @@ print.summary.apca <- function(x, ...) {
 
 #' @export
 plot.apca <- function(x, plot = "prof", names = NULL, 
-	dates1 = NULL, ...) {
+	dates1 = NULL) {
 
 	if(is.null(names)) {
 		names <- colnames(x$conc)
