@@ -3,14 +3,17 @@ Title: HANdles Detection Limits when Estimating Sources
 Version: 0.1
 Author: Jenna Krall <jenna.krall@gmail.com>
 Maintainer: Jenna Krall <jenna.krall@gmail.com>
-Description: handles helps users adjust censored PM2.5 constituent concentrations with 
-	     data below minimum detection limits (MDL) and perform 
-	     Absolute Principal Component Analysis (APCA) source apportionment. 
-	     Methods for adjusting censored data include a constant proportion
-	     of the MDL (e.g. 1/2 MDL), removing constituents with many 
-	     censored observations, and a likelihood-based method. 
-Depends: R (>= 3.0.2)
+Description: handles helps users adjust censored PM2.5 constituent
+    concentrations with data below minimum detection limits (MDL) and perform
+    Absolute Principal Component Analysis (APCA) source apportionment. Methods
+    for adjusting censored data include a constant proportion of the MDL (e.g.
+    1/2 MDL), removing constituents with many censored observations, and a
+    likelihood-based method.
+Depends:
+    R (>= 3.0.2)
 Suggests:
-Imports: 
+    
+Imports:
+    
 License: What license is it under?
 LazyData: true
