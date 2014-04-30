@@ -17,8 +17,8 @@
 #' #param ... other arguments
 #' @export
 #' @examples
-#' apca(nydat)
-#' apca(nydat, mdl = mdls, adjust = "substitute")
+#' apca(nycdat)
+#' apca(nycdat, mdl = nycmdl, adjust = "substitute")
 apca <- function(x, ...) UseMethod("apca")
 
 
