@@ -1,3 +1,4 @@
+S3method(adjust,default)
 S3method(apca,default)
 export(adjust)
 export(apca)
