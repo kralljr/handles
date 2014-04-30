@@ -9,11 +9,6 @@ Description: handles helps users adjust censored PM2.5 constituent
     for adjusting censored data include a constant proportion of the MDL (e.g.
     1/2 MDL), removing constituents with many censored observations, and a
     likelihood-based method.
-Depends:
-    R (>= 3.0.2)
-Suggests:
-    
-Imports:
-    
+Depends:    R (>= 3.0.2)
 License: What license is it under?
 LazyData: true
