@@ -37,6 +37,8 @@ concentrations of chemical constituents. See Thurston and
 Spengler (1985, Atmospheric Environment)
 }
 \examples{
+data(nycdat)
+data(nycmdl)
 apca(nycdat)
 apca(nycdat, mdl = nycmdl, adjust = "substitute")
 }

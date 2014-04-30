@@ -17,32 +17,13 @@
 #' #param ... other arguments
 #' @export
 #' @examples
+#' data(nycdat)
+#' data(nycmdl)
 #' apca(nycdat)
 #' apca(nycdat, mdl = nycmdl, adjust = "substitute")
 apca <- function(x, ...) UseMethod("apca")
 
-
-#' Absolute Principal Component Analysis (APCA)
-#'
-#' \code{apca} performs APCA on daily PM2.5 constituent concentrations
-#'
-#' This is a function to estimate PM2.5 source profiles and daily 
-#' PM2.5 source concentrations from PM2.5 constituent concentrations
-#' observed at ambient monitors (e.g. EPA Chemical Speciation Network).
-#' Works on dataframe where the first column is date and all subsequent 
-#' columns are concentrations of chemical constituents.
-#' See Thurston and Spengler (1985, Atmospheric Environment)
-#'
-#' @param data data frame of daily constituent concentrations with date as first column
-#' @param tots vector of total concentrations (total PM2.5) for each day.  If null, uses \code{rowSums(data)}
-#' @param nsources number of sources.  If null, uses number of eigenvalues of the correlation matrix greater than one.
-#' @param adjust method to adjust censored concentrations below minimum detection limits (MDLs).  If null, uses complete case data
-#' @param mdl either a vector of mdls corresponding to each constituent or a matrix of mdls corresponding to each constituent and each day. 
-#' #param ... other arguments
 #' @export
-#' @examples
-#' apca(nycdat)
-#' apca(nycdat, mdl = nycmdl, adjust = "substitute")
 apca.default <- function(data, tots = NULL,
 	nsources = NULL, adjust = NULL,  
 	mdl = NULL, ...){
@@ -256,7 +237,7 @@ abzero <- function(data, bstar, ...){
 
 
 
-
+#' @export
 print.apca <- function(x, ...) {
 	cat("Call:\n")
 	print(x$call)
@@ -264,6 +245,8 @@ print.apca <- function(x, ...) {
 	print(x$prof)
 }
 
+
+#' @export
 summary.apca <- function(x, ...) {
 	
 	ns <- ncol(x$conc)
@@ -277,7 +260,7 @@ summary.apca <- function(x, ...) {
 	res
 }
 
-
+#' @export
 print.summary.apca <- function(x, ...) {
 	cat("Call:\n")
 	print(x$call)
@@ -289,7 +272,7 @@ print.summary.apca <- function(x, ...) {
 	print(x$profs)
 }
 
-
+#' @export
 plot.apca <- function(x, plot = "prof", names = NULL, 
 	dates1 = NULL, ...) {
 

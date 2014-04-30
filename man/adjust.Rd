@@ -1,6 +1,6 @@
 \name{adjust}
 \alias{adjust}
-\title{Adjusting data below the MDL}
+\title{adjust}
 \usage{
 adjust(x, ...)
 }
@@ -31,9 +31,11 @@ adjust(x, ...)
   likelihood-based method #param ... other arguments}
 }
 \description{
-\code{adjust} adjusts censored concentrations below the MDL
+Adjusting data below the MDL
 }
 \details{
+\code{adjust} adjusts censored concentrations below the MDL
+
 These are functions to create complete PM2.5 constitutent
 concentrations by substituting, excluding, or imputing
 censored data. Works on dataframe where the first column is
@@ -41,10 +43,10 @@ date and all subsequent columns are concentrations of
 chemical constituents.
 }
 \examples{
-adjust(nycdat, )
-apca(nycdat, mdl = mdls, adjust = "substitute")
-}
-\seealso{
-Other adjust1: \code{\link{print.adjust}}
+data(nycdat)
+data(nycmdl)
+adjust(nycdat, mdl = mdls, method = "substitute", sub = 1/sqrt(2))
+adjust(nycdat, mdl = mdls, method = "exclude", experc = 0.2)
+adjust(nycdat, mdl = mdls, method = "likelihood")
 }
 
