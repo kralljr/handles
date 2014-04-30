@@ -1,6 +1,24 @@
-
-
-
+#' Adjusting data below the MDL
+#'
+#' \code{adjust} adjusts censored concentrations below the MDL
+#'
+#' These are functions to create complete PM2.5 constitutent
+#' concentrations by substituting, excluding, or imputing censored 
+#' data. Works on dataframe where the first column is date and all subsequent 
+#' columns are concentrations of chemical constituents.
+#'
+#' @param data data frame of daily constituent concentrations with date as first column
+#' @param mdl vector or matrix of MDLs for each variable of data
+#' @param method one of three methods.  'substitute' substitutes all censored constant proportion of the mdl (sub * mdl).  'exclude' excludes constituents with more than experc censored data.  'likelihood' multiply imputes censored data with a likelihood-based method.
+#' @param sub proportion of MDL to substitute censored concentrations.  Default is 0.5.
+#' @param experc If a constituent exceeds this value, using the exclude method, the constituent will be dropped from the analysis. 
+#' @param N number of draws from posterior for likelihood-based method
+#' @param burnin number of samples to discard for likelihood-based method
+#' #param ... other arguments
+#' @export
+#' @examples
+#' adjust(nycdat, )
+#' apca(nycdat, mdl = mdls, adjust = "substitute")
 adjust <- function(x, ...) UseMethod("adjust")
 
 
@@ -12,17 +30,18 @@ adjust.default <- function(data, mdl,
 		stop("First column must be 'date'")
 	}
 	dates <- data[, 1]
-	dat <- data[, -1]
+	dat <- as.matrix(data[, -1])
 	
 	#get one MDL for each constituent	
-	if(!is.null(dim(mdl))) {
+	if(!is.null(dim(mdl)) & dim(mdl)[1] > 1) {
 		var1 <- apply(mdl, 2, var, na.rm = T)
 		if(sum(var1) > 0) {
 			warning("MDLs vary over time, using maximum")
 		}
 		mdl <- apply(mdl, 2, max, na.rm = T)
 	}
-	mdl <- matrix(rep(mdl, nrow(dat)), byrow = T, nrow(dat))
+	mdl <- matrix(rep(as.numeric(mdl), nrow(dat)), 
+		byrow = T, nrow(dat))
 	
 	bdls <- 1 * (dat < mdl)
 	sumbdls <- apply(bdls, 2, mean)
