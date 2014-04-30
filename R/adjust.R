@@ -20,9 +20,9 @@
 #' @examples
 #' data(nycdat)
 #' data(nycmdl)
-#' adjust(nycdat, mdl = nycmdl, method = "substitute", sub = 1/sqrt(2))
-#' adjust(nycdat, mdl = nycmdl, method = "exclude", experc = 0.2)
-#' adjust(nycdat, mdl = nycmdl, method = "likelihood")
+#' adjust(nycdat, mdl = nycmdl, adjust = "substitute", sub = 1/sqrt(2))
+#' adjust(nycdat, mdl = nycmdl, adjust = "exclude", experc = 0.2)
+#' adjust(nycdat, mdl = nycmdl, adjust = "likelihood")
 adjust <- function(x, ...) UseMethod("adjust")
 
 

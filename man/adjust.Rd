@@ -9,7 +9,7 @@ adjust(x, ...)
 \method{adjust}{default}(data, mdl, adjust = c("substitute", "exclude",
   "likelihood"), sub = 0.5, experc = 0.25, N = 10, burnin = 2, ...)
 
-\method{print}{adjust}(x)
+print.adjust(x)
 }
 \arguments{
   \item{data}{data frame of daily constituent
@@ -52,8 +52,8 @@ chemical constituents.
 \examples{
 data(nycdat)
 data(nycmdl)
-adjust(nycdat, mdl = nycmdl, method = "substitute", sub = 1/sqrt(2))
-adjust(nycdat, mdl = nycmdl, method = "exclude", experc = 0.2)
-adjust(nycdat, mdl = nycmdl, method = "likelihood")
+adjust(nycdat, mdl = nycmdl, adjust = "substitute", sub = 1/sqrt(2))
+adjust(nycdat, mdl = nycmdl, adjust = "exclude", experc = 0.2)
+adjust(nycdat, mdl = nycmdl, adjust = "likelihood")
 }
 
