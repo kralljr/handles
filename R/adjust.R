@@ -64,19 +64,23 @@ adjust.default <- function(data, mdl,
 	out$call <- match.call()
 	out$bdls <- sumbdls
 	
-	if(adjust == "substitute") {
+	if(adjust == "substitute" | adjust == "exclude") {
 		dat1 <- dat * (1- bdls) + sub * mdl * bdls
 		out$sub <- sub
-	}else if(adjust == "exclude") {
 		
-		whkeep <- which(sumbdls <= experc)
-		if(length(whkeep) == 0) {
-			stop("Exclude method drops all constituents")
+		if(adjust == "exclude") {
+		
+			whkeep <- which(sumbdls <= experc)
+			if(length(whkeep) == 0) {
+				stop("Exclude method drops all constituents")
+			}
+			
+			dat1 <- dat1[, whkeep]
+			out$experc <- experc
+			out$exclude <- cn[-whkeep]
+			cn <- cn[whkeep]
+
 		}
-		
-		dat1 <- dat[, whkeep]
-		out$exclude <- cn[-whkeep]
-		cn <- cn[whkeep]
 	}else if(adjust == "likelihood") {
 		guess <- list()
 		guess[[1]] <- dat
