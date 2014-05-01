@@ -52,6 +52,12 @@ chemical constituents.
 \examples{
 data(nycdat)
 data(nycmdl)
+#fix data totals
+pm <- nycdat$PM25
+whPM <- which(colnames(nycdat) == "PM25")
+nycdat <- nycdat[, -whPM]
+whPM <- which(colnames(nycmdl) == "PM25")
+nycmdl <- nycmdl[, -whPM]
 adjust(nycdat, mdl = nycmdl, adjust = "substitute", sub = 1/sqrt(2))
 adjust(nycdat, mdl = nycmdl, adjust = "exclude", experc = 0.2)
 adjust(nycdat, mdl = nycmdl, adjust = "likelihood")
