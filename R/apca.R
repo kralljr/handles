@@ -39,7 +39,7 @@ apca.default <- function(data, tots = NULL,
 	if(!is.null(adjust)) {
 		adj1 <- adjust(data = data, mdl = mdl, 
 			adjust = adjust, ...)
-		dat <- adj1$dat
+		data <- adj1$dat
 	}	
 		
 	if(class(data[, 1]) != "Date") {
