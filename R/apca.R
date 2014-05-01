@@ -19,7 +19,14 @@
 #' @examples
 #' data(nycdat)
 #' data(nycmdl)
+#' #fix data totals
+#' pm <- nycdat$PM25
+#' whPM <- which(colnames(nycdat) == "PM25")
+#' nycdat <- nycdat[, -whPM]
+#' whPM <- which(colnames(nycmdl) == "PM25")
+#' nycmdl <- nycmdl[, -whPM]
 #' apca(nycdat)
+#' apca(nycdat, tots = pm)
 #' apca(nycdat, mdl = nycmdl, adjust = "substitute")
 apca <- function(x, ...) UseMethod("apca")
 
