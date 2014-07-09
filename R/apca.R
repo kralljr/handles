@@ -34,7 +34,7 @@ apca <- function(x, ...) UseMethod("apca")
 #' @export
 apca.default <- function(data, tots = NULL,
 	nsources = NULL, adjust = NULL,  
-	mdl = NULL, ...){
+	mdl = NULL, cut = 1, type = "apca", ...){
 		
 	if(!is.null(adjust)) {
 		adj1 <- adjust(data = data, mdl = mdl, 
@@ -50,12 +50,12 @@ apca.default <- function(data, tots = NULL,
 	data <- data[, -1]	
 		
 	#standardize data (mean zero, sd 1)
-	stddata <- stdize1(data)
+	stddata <- stdize1(data)[[1]]
 	
 	#Use PC method to get number of sources
 	if(is.null(nsources)) {
 		pr1 <- prcomp(stddata)
-		nsources <- length(which(pr1$sdev > 1))
+		nsources <- length(which(pr1$sdev > cut))
 	}
 		
 	#get scores and rotation matrix bstar	
@@ -66,9 +66,18 @@ apca.default <- function(data, tots = NULL,
 	vmax <- temp$vmax
 
 	#use regressions to obtain source profiles and source concentrations
-	apca <- getscoresprofs(data = data, bstar = bstar, 
-		scores = scores, tots = tots, dates = dates) 
-
+    if(tolower(type) == "apca") {
+    	apca <- getscores(data = data, bstar = bstar, 
+	    	scores = scores, tots = tots, dates = dates, type = type) 
+    }else if(tolower(type) == "mapca") {
+        
+    }else{
+        stop("APCA type not recognized")
+    }
+    
+    
+    
+    
 	apca$vmax <- vmax
 	apca$dates <- dates
 	apca$nsources <- nsources
@@ -91,7 +100,7 @@ apca.default <- function(data, tots = NULL,
 	
 #### function to standardize data: mean 0, var 1
 # dat is data matrix T (ndays) X P (nconstituents)
-stdize1 <- function(data) {
+stdize1 <- function(data, i = "NA") {
 	
 	#get means and sd
 	cm <- colMeans(data, na.rm = T)
@@ -104,10 +113,12 @@ stdize1 <- function(data) {
 	#eliminate divide by zero
 	wh0 <- which(sds == 0)
 	if(length(wh0) > 0) {
-		data <- data[, -wh0]
-		}
-
-	data
+	    cat("Monitor ", i, ": No variability in ", colnames(data)[wh0], "\n")
+	    data[, wh0] <- NA
+	    data <- data[, -wh0]
+	}
+	
+	list(data, wh0)
 	
 }
 
@@ -128,8 +139,6 @@ getbstar <- function(stddata, nsources, dates) {
 	vmax <- varimax(rots[, 1 : nsources], normalize = T)
 	bstar1 <- as.matrix(vmax[[1]][1 : ncol(stddata), ])
 	
-	#get uncorrelated factors and scores
-
 	#inverse correlation matrix
 	scor <- chol2inv(chol(cor(stddata)))
 	bstar <- scor %*% bstar1
@@ -148,7 +157,7 @@ getbstar <- function(stddata, nsources, dates) {
 
 
 
-getscoresprofs <- function(data, bstar, scores, tots, dates) {
+getscores <- function(data, bstar, scores, tots, dates, type == "apca") {
 
 	scores1 <- scores
 	
@@ -168,9 +177,12 @@ getscoresprofs <- function(data, bstar, scores, tots, dates) {
 		tots <- rowSums(data)
 	}
 		
-	#get source concentrations	
-	reg1 <- lm(tots ~ apcs)
-	
+	#get source concentrations
+    if(type == "apca") {
+    	reg1 <- lm(tots ~ apcs)
+    }else if(type == "mapca") {
+        reg1 <- lm(tot)
+    }
 	
 	#unexplained sources
 	leftover <- reg1$coef[1]
@@ -184,7 +196,7 @@ getscoresprofs <- function(data, bstar, scores, tots, dates) {
 	Xmat <- cbind(rep(1, nrow(conc1)), conc1)
 	#get (X'X)^(-1)
 	s1 <- chol(t(Xmat) %*% Xmat)
-	s1 <- try(chol2inv(Xmat))
+	s1 <- try(chol2inv(s1))
 	
 	if (class(s1) != "try-error"){
 		
