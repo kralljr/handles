@@ -190,8 +190,12 @@ getscoresprofs <- function(data, bstar, scores, tots, dates, mons = NULL,
     
     if(tolower(type) == "mapca") {
         conc <- data.frame(conc, mons)
+        rn <- paste0(mons, dates)
+    }else{
+        rn <- dates
+        
     }
-	rownames(conc) <- dates
+	rownames(conc) <- rn
 	
 	
 	res <- list(conc = conc, profs = profs, leftover = leftover, betas = betas)
