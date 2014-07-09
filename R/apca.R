@@ -34,7 +34,8 @@ apca <- function(x, ...) UseMethod("apca")
 #' @export
 apca.default <- function(data, tots = NULL,
 	nsources = NULL, adjust = NULL,  
-	mdl = NULL, cut = 1, type = "apca", mons = NULL, ...){
+	mdl = NULL, cut = 1, type = "apca", mons = NULL,
+    i = NA, ...){
 		
 	if(!is.null(adjust)) {
 		adj1 <- adjust(data = data, mdl = mdl, 
@@ -50,7 +51,7 @@ apca.default <- function(data, tots = NULL,
 	data <- data[, -1]	
 		
 	#standardize data (mean zero, sd 1)
-	stddata <- stdize1(data)[[1]]
+	stddata <- stdize1(data, i)[[1]]
 	
 	#Use PC method to get number of sources
 	if(is.null(nsources)) {
@@ -190,7 +191,7 @@ getscoresprofs <- function(data, bstar, scores, tots, dates, mons = NULL,
     
     if(tolower(type) == "mapca") {
         conc <- data.frame(conc, mons)
-        rn <- paste0(mons, dates)
+        rn <- paste0(dates, mons)
     }else{
         rn <- dates
         
