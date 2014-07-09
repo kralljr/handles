@@ -34,7 +34,7 @@ apca <- function(x, ...) UseMethod("apca")
 #' @export
 apca.default <- function(data, tots = NULL,
 	nsources = NULL, adjust = NULL,  
-	mdl = NULL, cut = 1, type = "apca", ...){
+	mdl = NULL, cut = 1, type = "apca", mons = NULL, ...){
 		
 	if(!is.null(adjust)) {
 		adj1 <- adjust(data = data, mdl = mdl, 
@@ -66,17 +66,8 @@ apca.default <- function(data, tots = NULL,
 	vmax <- temp$vmax
 
 	#use regressions to obtain source profiles and source concentrations
-    if(tolower(type) == "apca") {
-    	apca <- getscores(data = data, bstar = bstar, 
-	    	scores = scores, tots = tots, dates = dates, type = type) 
-    }else if(tolower(type) == "mapca") {
-        
-    }else{
-        stop("APCA type not recognized")
-    }
-    
-    
-    
+    apca <- getscoresprofs(data = data, bstar = bstar, 
+	    	scores = scores, tots = tots, dates = dates, mons = mons, type = type) 
     
 	apca$vmax <- vmax
 	apca$dates <- dates
@@ -156,10 +147,15 @@ getbstar <- function(stddata, nsources, dates) {
 
 
 
-
-getscores <- function(data, bstar, scores, tots, dates, type == "apca") {
+#Function to get scores and profiles
+getscoresprofs <- function(data, bstar, scores, tots, dates, mons = NULL,
+    type = "apca") {
 
 	scores1 <- scores
+    
+    if(tolower(type) == "mapca" & is.null(mons)) {
+        stop("Need monitor list for mAPCA")
+    }
 	
 	cc <- complete.cases(t(scores))
 	scores <- scores[, cc]
@@ -176,61 +172,78 @@ getscores <- function(data, bstar, scores, tots, dates, type == "apca") {
 	if (is.null(tots)) {
 		tots <- rowSums(data)
 	}
-		
-	#get source concentrations
-    if(type == "apca") {
-    	reg1 <- lm(tots ~ apcs)
-    }else if(type == "mapca") {
-        reg1 <- lm(tot)
-    }
-	
-	#unexplained sources
-	leftover <- reg1$coef[1]
-	betas <- reg1$coef[-1]
+    
+    
+    #get scores
+	temp <- regress1(apcs, tots, mons, type)
+    leftover <- temp$xi0
+    betas <- temp$coefs
 	conc1 <- sweep(apcs, 2, betas, "*")
+    
+    #get profiles
+	profs <- getprofs(data, conc1, nsources, mons, type)
 
-
-	#get source profiles
-	
-	
-	Xmat <- cbind(rep(1, nrow(conc1)), conc1)
-	#get (X'X)^(-1)
-	s1 <- chol(t(Xmat) %*% Xmat)
-	s1 <- try(chol2inv(s1))
-	
-	if (class(s1) != "try-error"){
-		
-		betas <- s1 %*% t(Xmat) %*% as.matrix(data)
-		profs <- betas[-1, ]  
-		
-	} else {
-		
-		profs <- matrix(nrow = nsources, ncol = ncol(data))
-		for (i in 1 : ncol(data)) {
-			lm1 <- try(lm(data[, i] ~ conc1))
-			
-			if (class(lm1) != "try-error") {
-				profs[, i] <- lm1$coef[-1]
-			}
-
-		}
-		
-	}	
 	
 	conc <- matrix(nrow= nrow(conc1), ncol = ncol(scores1))
 	conc[, cc] <- conc1
 	colnames(conc) <- paste0("source", seq(1, nsources))
+    
+    if(tolower(type) == "mapca") {
+        conc <- data.frame(conc, mons)
+    }
 	rownames(conc) <- dates
-	rownames(profs) <- paste0("source", seq(1, nsources))
 	
 	
-	res <- list(conc = conc, profs = profs, leftover = leftover)
+	res <- list(conc = conc, profs = profs, leftover = leftover, betas = betas)
 	res
 	}
 	
-	
-	
 
+regress1 <- function(x, y, mons = NULL, type = "apca") {
+    
+    
+    #get source concentrations
+    if(tolower(type) == "apca") {
+        reg1 <- lm(y ~ x)
+        #unexplained sources
+        leftover <- reg1$coef[1]
+        betas <- reg1$coef[-1]
+  
+    }else if(tolower(type) == "mapca") {
+        reg1 <- try(lme(y ~ x, random = ~1 | mons))
+        
+        if(class(reg1) == "try-error") {
+            reg1 <- try(lme(y ~ x, random = ~1 | mons, 
+                            control = lmeControl(opt = "optim")))
+        }
+        leftover <- reg1$coef[[1]][1]
+        betas <- reg1$coef[[1]][-1]
+        
+    }
+    
+    list(xi0 = leftover, coefs = betas)
+    
+}
+	
+#Function to get profiles for APCA
+getprofs <- function(data, conc1, nsources, mons, type) {
+
+    #get source profiles
+
+    profs <- matrix(nrow = nsources, ncol = ncol(data))
+    for (i in 1 : ncol(data)) {
+          
+        lm1 <- try(regress1(conc1, data[, i], mons, type))
+        
+        if (class(lm1) != "try-error") {
+            profs[, i] <- lm1$coefs
+        }
+            
+    }	
+    
+    rownames(profs) <- paste0("source", seq(1, nsources))
+    profs
+}
 
 #Get rotated pollution-free day
 #data is uncentered data
