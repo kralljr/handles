@@ -35,7 +35,7 @@ apca <- function(x, ...) UseMethod("apca")
 apca.default <- function(data, tots = NULL,
 	nsources = NULL, adjust = NULL,  
 	mdl = NULL, cut = 1, type = "apca", mons = NULL,
-    i = NA, ...){
+    i = NA, print = F, ...){
 		
 	if(!is.null(adjust)) {
 		adj1 <- adjust(data = data, mdl = mdl, 
@@ -51,7 +51,7 @@ apca.default <- function(data, tots = NULL,
 	data <- data[, -1]	
 		
 	#standardize data (mean zero, sd 1)
-	stddata <- stdize1(data, i)[[1]]
+	stddata <- stdize1(data, i, print)[[1]]
 	
 	#Use PC method to get number of sources
 	if(is.null(nsources)) {
@@ -90,9 +90,14 @@ apca.default <- function(data, tots = NULL,
 
 	
 	
-#### function to standardize data: mean 0, var 1
-# dat is data matrix T (ndays) X P (nconstituents)
-stdize1 <- function(data, i = "NA") {
+#' \code{stdize1} Standardizes matrix so each column is mean 0 with variance 1
+#'
+#' @param data data frame of daily constituent concentrations with date as first column
+#' @param i iteration number
+#' @param print whether to print if variability of column is 0
+#' #param ... other arguments
+#' @export
+stdize1 <- function(data, i = "NA", print = F) {
 	
 	#get means and sd
 	cm <- colMeans(data, na.rm = T)
@@ -105,21 +110,21 @@ stdize1 <- function(data, i = "NA") {
 	#eliminate divide by zero
 	wh0 <- which(sds == 0)
 	if(length(wh0) > 0) {
-	    cat("Monitor ", i, ": No variability in ", colnames(data)[wh0], "\n")
-	    data[, wh0] <- NA
+        if(print == T) {
+	        cat("Monitor ", i, ": No variability in ", colnames(data)[wh0], "\n")
+        }
+            
+        data[, wh0] <- NA
 	    data <- data[, -wh0]
 	}
 	
-	list(data, wh0)
+	list(data = data, wh0 = wh0)
 	
 }
 
 
 
 
-#get factor rotation and scores
-#datasc is centered and scaled data
-#nsource is number of sources
 getbstar <- function(stddata, nsources, dates) {
 		
 	#perform PCA
