@@ -25,8 +25,7 @@ print.adjust(x)
 
 \item{N}{number of draws from posterior for likelihood-based method}
 
-\item{burnin}{number of samples to discard for likelihood-based method
-#param ... other arguments}
+\item{burnin}{number of samples to discard for likelihood-based method}
 }
 \description{
 Adjusting data below the MDL

@@ -10,8 +10,7 @@ stdize1(data, i = "NA", print = F)
 
 \item{i}{iteration number}
 
-\item{print}{whether to print if variability of column is 0
-#param ... other arguments}
+\item{print}{whether to print if variability of column is 0}
 }
 \description{
 \code{stdize1} Standardizes matrix so each column is mean 0 with variance 1

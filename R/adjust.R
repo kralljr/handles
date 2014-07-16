@@ -15,7 +15,6 @@
 #' @param experc If a constituent exceeds this value, using the exclude method, the constituent will be dropped from the analysis. 
 #' @param N number of draws from posterior for likelihood-based method
 #' @param burnin number of samples to discard for likelihood-based method
-#' #param ... other arguments
 #' @export
 #' @examples
 #' data(nycdat)

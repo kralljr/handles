@@ -19,8 +19,7 @@ apca(x, ...)
 
 \item{adjust}{method to adjust censored concentrations below minimum detection limits (MDLs).  If null, uses complete case data}
 
-\item{mdl}{either a vector of mdls corresponding to each constituent or a matrix of mdls corresponding to each constituent and each day.
-#param ... other arguments}
+\item{mdl}{either a vector of mdls corresponding to each constituent or a matrix of mdls corresponding to each constituent and each day.}
 }
 \description{
 \code{apca} performs APCA on daily PM2.5 constituent concentrations

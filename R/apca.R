@@ -14,7 +14,6 @@
 #' @param nsources number of sources.  If null, uses number of eigenvalues of the correlation matrix greater than one.
 #' @param adjust method to adjust censored concentrations below minimum detection limits (MDLs).  If null, uses complete case data
 #' @param mdl either a vector of mdls corresponding to each constituent or a matrix of mdls corresponding to each constituent and each day. 
-#' #param ... other arguments
 #' @export
 #' @examples
 #' data(nycdat)
@@ -95,7 +94,6 @@ apca.default <- function(data, tots = NULL,
 #' @param data data frame of daily constituent concentrations with date as first column
 #' @param i iteration number
 #' @param print whether to print if variability of column is 0
-#' #param ... other arguments
 #' @export
 stdize1 <- function(data, i = "NA", print = F) {
 	
