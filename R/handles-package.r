@@ -28,5 +28,5 @@
 #' in metropolitan Boston, 19(1) 9-25. 
 #' @docType package
 #' @name handles
-#' @importFrom nlme lme
+#' @import nlme
 NULL
