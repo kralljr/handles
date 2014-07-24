@@ -10,7 +10,7 @@ Description: handles helps users adjust censored PM2.5 constituent
     1/2 MDL), removing constituents with many censored observations, and a
     likelihood-based method.
 Depends:
-    R (>= 3.0.2)
+    R (>= 3.0)
 Imports:
     nlme (>= 3.1)
 License: What license is it under?
