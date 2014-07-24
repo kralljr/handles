@@ -218,7 +218,7 @@ regress1 <- function(x, y, mons = NULL, type = "apca") {
         betas <- reg1$coef[-1]
   
     }else if(tolower(type) == "mapca") {
-        reg1 <- try(lme(y ~ x, random = ~1 | mons))
+        reg1 <- try(lme(y ~ x, random = ~1 | mons), silent = T)
         
         if(class(reg1) == "try-error") {
             reg1 <- try(lme(y ~ x, random = ~1 | mons, 

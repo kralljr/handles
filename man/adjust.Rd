@@ -10,7 +10,7 @@ adjust(x, ...)
 \method{adjust}{default}(data, mdl, adjust = c("substitute", "exclude",
   "likelihood"), sub = 0.5, experc = 0.25, N = 10, burnin = 2, ...)
 
-print.adjust(x)
+\method{print}{adjust}(x)
 }
 \arguments{
 \item{data}{data frame of daily constituent concentrations with date as first column}
