@@ -279,14 +279,16 @@ ymissfun <- function(dat, mdls, nbdls, guessvec,
 	# for each day with an observation below the MDL
 	for (k in 1 : nrow(dat)) {
 		
-		#set up mean
-		mnzero <- t(gdat[k, ] - gthet)
+		
 
 		#if which missing greater than 0
 		if(length(wh_miss[[k]]) > 0) {
 		
 			#for each missing value on day i
 			for (j in 1 : length(wh_miss[[k]])) {
+				
+				#set up mean
+				mnzero <- t(gdat[k, ] - gthet)
 		
 				#find conditional mean/var
 				mnv <- impmisssingle(datk = gdat[k, ], 
@@ -302,7 +304,7 @@ ymissfun <- function(dat, mdls, nbdls, guessvec,
 				if( is.na(newymiss1)) {browser()}	
 		
 				#update guess
-				guessvec[[1]][k, wh_miss[[k]][j]] <- newymiss1
+				gdat[k, wh_miss[[k]][j]] <- newymiss1
 		
 				
 			
@@ -311,6 +313,8 @@ ymissfun <- function(dat, mdls, nbdls, guessvec,
 		} # ELSE DO NOTHING 
 		
 	}#end loop over row (k)
+	
+	guessvec[[1]] <- gdat
 	
 	list(guessvec, gsiginv)
 }
