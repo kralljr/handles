@@ -18,6 +18,9 @@ SIMapca <- function(data, tots = NULL,
 	mdl = NULL, cut = 1, type = "apca", mons = NULL,
     i = NA, print = F, k = 10, complete = F,...) {
 	
+	#add in date for simulated data
+	date <- as.Date(seq(1, nrow(data)), origin = "1970-01-01")
+	data <- data.frame(date, data)
 	
 	apca1 <- apca(data, tots, nsources, adjust, mdl, cut,
 		type, mons, i, print, ...)
