@@ -20,6 +20,16 @@ apca(x, ...)
 \item{adjust}{method to adjust censored concentrations below minimum detection limits (MDLs).  If null, uses complete case data}
 
 \item{mdl}{either a vector of mdls corresponding to each constituent or a matrix of mdls corresponding to each constituent and each day.}
+
+\item{cut}{cutoff for eigenvalues.  Only used if nsources is NULL}
+
+\item{type}{Source apportionment method (apca or mapca)}
+
+\item{mons}{vector of monitors corresponding to data}
+
+\item{i}{monitor number (for printing)}
+
+\item{print}{whether to print monitors without temporal variability}
 }
 \description{
 \code{apca} performs APCA on daily PM2.5 constituent concentrations
