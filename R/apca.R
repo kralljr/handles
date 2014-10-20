@@ -14,6 +14,11 @@
 #' @param nsources number of sources.  If null, uses number of eigenvalues of the correlation matrix greater than one.
 #' @param adjust method to adjust censored concentrations below minimum detection limits (MDLs).  If null, uses complete case data
 #' @param mdl either a vector of mdls corresponding to each constituent or a matrix of mdls corresponding to each constituent and each day. 
+#' @param cut cutoff for eigenvalues.  Only used if nsources is NULL
+#' @param type Source apportionment method (apca or mapca)
+#' @param mons vector of monitors corresponding to data
+#' @param i monitor number (for printing)
+#' @param print whether to print monitors without temporal variability
 #' @export
 #' @examples
 #' data(nycdat)
@@ -250,6 +255,14 @@ getprofs <- function(data, conc1, nsources, mons, type) {
     }	
     
     rownames(profs) <- paste0("source", seq(1, nsources))
+    
+    #colnames of profiles
+    cn <- colnames(data)
+    if(is.null(cn)) {
+    		cn <- paste0("cons", rep(1, ncol(data)))
+    }
+    colnames(profs) <- cn
+    
     profs
 }
 
