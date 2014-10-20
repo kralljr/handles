@@ -29,4 +29,5 @@
 #' @docType package
 #' @name handles
 #' @import nlme
+#' @import class
 NULL
