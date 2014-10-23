@@ -16,7 +16,7 @@
 SIMapca <- function(data, tots = NULL,
 	nsources = NULL, adjust = NULL,  
 	mdl = NULL, cut = 1, type = "apca", mons = NULL,
-    i = NA, print = F, k = 10, complete = F, trim1 = 0,...) {
+    i = NA, print = F, k = 10, complete = F,...) {
 	
 	#add in date for simulated data
 	date <- as.Date(seq(1, nrow(data)), origin = "1970-01-01")
@@ -27,8 +27,8 @@ SIMapca <- function(data, tots = NULL,
 		
 	#summary
 	conc <- apca1$conc
-	means <- apply(conc, 2, mean, na.rm = T, trim = trim1)	
-	sd <- apply(conc, 2, sd, na.rm = T, trim = trim1)	
+	means <- apply(conc, 2, mean, na.rm = T)	
+	sd <- apply(conc, 2, sd, na.rm = T)	
 		
 	#classify
 	profile <- apca1$prof
