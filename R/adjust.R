@@ -142,6 +142,7 @@ print.adjust <- function(x) {
 #' @param data data frame of daily constituent concentrations (ndays X ncons)
 #' @param mdl matrix of MDLs with dimension the same as the data
 #' @param unc matrix of uncertainties with dimension the same as the data
+#' @export
 snrat <- function(dat, mdl, unc) {
 
 	#find SN ratio for each constituent
