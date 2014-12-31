@@ -166,7 +166,7 @@ snrat <- function(dat, mdl, unc) {
 	dat <- dat * (bdls == 0) + 1/2 * mdl * (bdls == 1)
 
 
-	list(dat = dat, unc = unc)
+	list(dat = dat, unc = unc, sn = sn)
 }
 
 
