@@ -35,7 +35,7 @@ adjust <- function(x, ...) UseMethod("adjust")
 #' @export
 adjust.default <- function(data, mdl,
 	adjust = c("substitute", "exclude", "likelihood", "snrat"),
-	unc = NULL, sub = 0.5, experc = 0.25, N = 10, burnin = 2, ...) {
+	unc = NULL, sub = 0.5, experc = 0.25, N = 10, burnin = 2, dattype = NULL, ...) {
 
 	if(class(data[, 1]) != "Date") {
 		stop("First column must be 'date'")
@@ -89,6 +89,13 @@ adjust.default <- function(data, mdl,
 		out$unc <- snrat1$unc
 
 	}else if(adjust == "likelihood") {
+		if(is.null(dattype)) {
+			stop("Need to specify whether data is logged")
+		}else if(dattype == "lognormal") {
+			dat <- log(dat)
+			mdl <- log(mdl)
+		}
+		
 		guess <- list()
 		guess[[1]] <- dat
 		guess[[2]] <- colMeans(dat)
@@ -100,6 +107,10 @@ adjust.default <- function(data, mdl,
 		out$burnin <- burnin
 		out$N <- N
 		dat1 <- apply(lhood1$gymiss, c(1, 2), mean, na.rm = T)
+		
+		if(dattype == "lognormal") {
+			dat1 <- exp(dat1)
+		}
 	}
 
 	dat1 <- data.frame(dates, dat1)
