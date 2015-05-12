@@ -15,6 +15,8 @@
 #' @param experc If a constituent exceeds this value, using the exclude method, the constituent will be dropped from the analysis.
 #' @param N number of draws from posterior for likelihood-based method
 #' @param burnin number of samples to discard for likelihood-based method
+#' @param dattype Only needed for model-based imputation approach.  Specify lognormal if data should be logged before imputation.
+#' @param guess1 Can specify guessvec for starting MCMC
 #' @export
 #' @examples
 #' data(nycdat)
@@ -35,7 +37,7 @@ adjust <- function(x, ...) UseMethod("adjust")
 #' @export
 adjust.default <- function(data, mdl,
 	adjust = c("substitute", "exclude", "likelihood", "snrat"),
-	unc = NULL, sub = 0.5, experc = 0.25, N = 10, burnin = 2, dattype = NULL, ...) {
+	unc = NULL, sub = 0.5, experc = 0.25, N = 10, burnin = 2, dattype = NULL, guess1 = NULL,...) {
 
 	if(class(data[, 1]) != "Date") {
 		stop("First column must be 'date'")
@@ -96,11 +98,14 @@ adjust.default <- function(data, mdl,
 			mdl <- log(mdl)
 		}
 		
-		guess <- list()
-		guess[[1]] <- dat
-		guess[[2]] <- colMeans(dat, na.rm = T)
-#		guess[[3]] <- cov(dat)
-		guess[[3]] <- diag(ncol(dat))
+		if(is.null(guess)) {
+			guess <- list()
+			guess[[1]] <- dat
+			guess[[2]] <- colMeans(dat, na.rm = T)
+			guess[[3]] <- diag(ncol(dat))
+		}else{
+			guess <- guess1
+			}
 		lhood1 <- lhood(dat, mdl, guess, burnin, N)
 		out$impmean <- lhood1$gthet
 		out$impcov <- lhood1$gsig
