@@ -98,8 +98,9 @@ adjust.default <- function(data, mdl,
 		
 		guess <- list()
 		guess[[1]] <- dat
-		guess[[2]] <- colMeans(dat)
-		guess[[3]] <- cov(dat)
+		guess[[2]] <- colMeans(dat, na.rm = T)
+#		guess[[3]] <- cov(dat)
+		guess[[3]] <- diag(ncol(dat))
 		lhood1 <- lhood(dat, mdl, guess, burnin, N)
 		out$impmean <- lhood1$gthet
 		out$impcov <- lhood1$gsig
