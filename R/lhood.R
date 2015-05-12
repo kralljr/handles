@@ -56,6 +56,7 @@ lhood <- function(dat, mdls,
 	
 	#for each iteration (N large)
 	for(i in 1:N){
+		#print(i)
 		j <- 1
 		while(j<4){
 			#update f/lam
@@ -193,9 +194,18 @@ gibbsfun <- function(dat, nbdlmat, guessvec,
 	#we have initial guesses 
 	if (wh == 1) {
 		#update missing
-		guessvec <- ymissfun(dat = dat, mdls = mdls, 
-			nbdls = nbdlmat, guessvec = guessvec,
-			wh_miss = wh_miss, minmdls = minmdls)
+		
+		# if all mdls missing
+		if(is.na(sum(mdls))) {
+			guessvec <- ymissfun1(dat = dat, mdls = mdls, 
+				nbdls = nbdlmat, guessvec = guessvec,
+				wh_miss = wh_miss, minmdls = minmdls)
+		}else {
+			stop("rtnorm function hangs.  See C function in git-gibbs-truncnorm")
+			guessvec <- ymissfun(dat = dat, mdls = mdls, 
+				nbdls = nbdlmat, guessvec = guessvec,
+				wh_miss = wh_miss, minmdls = minmdls)
+		}
 	} else if (wh == 2) {
 		#update mean
 		guessvec <- thetfun(dat, guessvec)
@@ -309,6 +319,92 @@ ymissfun <- function(dat, mdls, nbdls, guessvec,
 				
 			
 			}#end loop over col (j)
+		
+		} # ELSE DO NOTHING 
+		
+	}#end loop over row (k)
+	
+	guessvec[[1]] <- gdat
+	
+	list(guessvec, gsiginv)
+}
+
+
+
+
+	
+
+##########################################
+#get new guess for general missing data: MV normal
+#arguments 
+	#dat: logged data matrix N_days X N_cons
+	#mdls: logged data matrix N_days X N_cons of mdls
+	#nbdls: binary matrix N_days X N_cons, 
+		#1 = below DL, 0 above DL
+	#guessvec list of initial guesses
+		#guessvec[[1]] missing
+		#guessvec[[2]] mean
+		#guessvec[[3]] covariance
+	#wh_miss list of length N_days with 
+		#column numbers of missing
+	#minmdls smallest mdl value	
+##########################################
+ymissfun1 <- function(dat, mdls, nbdls, guessvec,
+	wh_miss, minmdls) {
+	
+	#set old estimates
+	gsig <- guessvec[[3]]		
+	gthet <- guessvec[[2]]
+	gdat <- guessvec[[1]]
+	
+	
+	#set up for univariate
+	m <- 1
+	
+	#get inverse of gsig
+	gsiginv <- chol2inv(chol(gsig))
+	
+	#which columns have missing
+	wcolmiss <- which(is.na(colSums(dat) ))
+
+	
+	# fix wh_miss
+	wh_miss <- apply(dat, 1, function(x) which(is.na(x)))
+	
+	# for each day with a missing obs
+	for (k in 1 : nrow(dat)) {
+		
+		
+
+		#if which missing greater than 0
+		if(length(wh_miss[[k]]) > 0) {
+		
+			#set up mean
+			mnzero <- t(gdat[k, ] - gthet)
+		
+		    num <- wh_miss[[k]]
+		    ssig1 <- chol2inv(chol(gsig[-num, -num]))
+		    t1 <- gsig[num, -num] %*% ssig1 
+		    var <- gsig[num, num] - t1 %*% gsig[-num, num]
+			mn <- gthet[num] + t1 %*% mnzero[-num]
+					
+	
+			#propose MVnormal	 
+				#log scale with cond mean and covar
+			newymiss1 <- try(rmvnorm(1, mean = mn, sigma = var))
+			iter <- 1
+			while(class(newymiss1) == "try-error" & iter < 4) {
+				var <- as.matrix(forceSymmetric(var))
+				newymiss1 <- try(rmvnorm(1, mean = mn, sigma = var))
+				iter <- iter + 1
+			}
+			
+			if( is.na(sum(newymiss1))) {browser()}	
+	
+			#update guess
+			gdat[k, num] <- newymiss1
+	
+				
 		
 		} # ELSE DO NOTHING 
 		
