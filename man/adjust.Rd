@@ -10,7 +10,7 @@ adjust(x, ...)
 
 \method{adjust}{default}(data, mdl, adjust = c("substitute", "exclude",
   "likelihood", "snrat"), unc = NULL, sub = 0.5, experc = 0.25, N = 10,
-  burnin = 2, dattype = NULL, ...)
+  burnin = 2, dattype = NULL, guess1 = NULL, ...)
 
 \method{print}{adjust}(x)
 }
@@ -28,6 +28,10 @@ adjust(x, ...)
 \item{N}{number of draws from posterior for likelihood-based method}
 
 \item{burnin}{number of samples to discard for likelihood-based method}
+
+\item{dattype}{Only needed for model-based imputation approach.  Specify lognormal if data should be logged before imputation.}
+
+\item{guess1}{Can specify guessvec for starting MCMC}
 }
 \description{
 Adjusting data below the MDL

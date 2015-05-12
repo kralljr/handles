@@ -383,6 +383,7 @@ ymissfun1 <- function(dat, mdls, nbdls, guessvec,
 			mnzero <- t(gdat[k, ] - gthet)
 		
 		    num <- wh_miss[[k]]
+            
 		    ssig1 <- chol2inv(chol(gsig[-num, -num]))
 		    t1 <- gsig[num, -num] %*% ssig1 
 		    var <- gsig[num, num] - t1 %*% gsig[-num, num]
