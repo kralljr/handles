@@ -201,7 +201,7 @@ gibbsfun <- function(dat, nbdlmat, guessvec,
 				nbdls = nbdlmat, guessvec = guessvec,
 				wh_miss = wh_miss, minmdls = minmdls)
 		}else {
-			stop("rtnorm function hangs.  See C function in git-gibbs-truncnorm")
+		#	stop("rtnorm function hangs.  See C function in git-gibbs-truncnorm")
 			guessvec <- ymissfun(dat = dat, mdls = mdls, 
 				nbdls = nbdlmat, guessvec = guessvec,
 				wh_miss = wh_miss, minmdls = minmdls)
@@ -308,10 +308,15 @@ ymissfun <- function(dat, mdls, nbdls, guessvec,
 	
 				#propose truncated normal (0 to mdl)	 
 					#log scale with cond mean and var		
-				newymiss1 <- rtnorm(1, lower = minmdls - 10, 
-					upper = mdls[k, wh_miss[[k]][j]],
+				#newymiss1 <- rtnorm(1, lower = minmdls - 10, 
+				#	upper = mdls[k, wh_miss[[k]][j]],
+				#	mean = mnv[[1]], sd = sqrt(mnv[[2]]))
+				
+				newymiss1 <- rtruncnorm(1, a = minmdls - 10, 
+					b = mdls[k, wh_miss[[k]][j]],
 					mean = mnv[[1]], sd = sqrt(mnv[[2]]))
-				if( is.na(newymiss1)) {browser()}	
+                                
+                                if( is.na(newymiss1)) {browser()}	
 		
 				#update guess
 				gdat[k, wh_miss[[k]][j]] <- newymiss1
