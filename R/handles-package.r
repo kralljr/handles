@@ -30,4 +30,6 @@
 #' @name handles
 #' @import nlme
 #' @import class
+#' @import MCMCpack
+#' @import truncnorm
 NULL
