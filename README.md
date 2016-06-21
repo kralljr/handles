@@ -6,7 +6,7 @@ HANdles Detection Limits when Estimating Sources
 Install using `devtools':
 
 ```S
-devtools::install_github("handles", "kralljr")
+devtools::install_github("kralljr/handles")
 ```
 
 Functions to adjust censored PM2.5 constituent concentrations that fall below minimum detection limits (MDL).  With handles you can:
