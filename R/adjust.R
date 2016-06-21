@@ -29,7 +29,7 @@
 #' nycmdl <- nycmdl[, -whPM]
 #' adjust(nycdat, mdl = nycmdl, adjust = "substitute", sub = 1/sqrt(2))
 #' adjust(nycdat, mdl = nycmdl, adjust = "exclude", experc = 0.2)
-#' adjust(nycdat, mdl = nycmdl, adjust = "likelihood")
+#' adjust(nycdat, mdl = nycmdl, adjust = "likelihood", dattype = "lognormal")
 adjust <- function(x, ...) UseMethod("adjust")
 
 
@@ -94,15 +94,17 @@ adjust.default <- function(data, mdl,
 		if(is.null(dattype)) {
 			stop("Need to specify whether data is logged")
 		}else if(dattype == "lognormal") {
-			dat <- log(dat)
+			dat[dat == 0] <- 10^(-10)
+                        dat <- log(dat)
 			mdl <- log(mdl)
 		}
 		
-		if(is.null(guess)) {
+		if(is.null(guess1)) {
 			guess <- list()
-			guess[[1]] <- dat
-			guess[[2]] <- colMeans(dat, na.rm = T)
-			guess[[3]] <- diag(ncol(dat))
+                        guess1 <- dat
+			guess[[1]] <- guess1
+			guess[[2]] <- colMeans(guess1, na.rm = T)
+			guess[[3]] <- diag(ncol(guess1))
 		}else{
 			guess <- guess1
 			}
