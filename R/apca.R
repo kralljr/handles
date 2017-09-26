@@ -207,7 +207,7 @@ getscoresprofs <- function(data, bstar, scores, tots, dates, mons = NULL,
 	rownames(conc) <- rn
 	
 	
-	res <- list(conc = conc, profs = profs, leftover = leftover, betas = betas)
+	res <- list(conc = conc, profs = profs, leftover = leftover, betas = betas, apcs = apcs)
 	res
 	}
 	
