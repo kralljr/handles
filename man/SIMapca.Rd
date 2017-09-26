@@ -32,4 +32,3 @@ SIMapca(data, tots = NULL, nsources = NULL, adjust = NULL, mdl = NULL,
 \description{
 \code{simAPCA} applies APCA and extracts summary information for simulation study
 }
-

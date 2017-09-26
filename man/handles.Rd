@@ -35,4 +35,3 @@ George D. Thurston, John D. Spengler (1985).  A quantitative
 assessment of source contributions to inhalable particulate matter pollution
 in metropolitan Boston, 19(1) 9-25.
 }
-

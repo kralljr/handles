@@ -16,4 +16,3 @@ stdize1(data, i = "NA", print = F)
 \description{
 \code{stdize1} Standardizes matrix so each column is mean 0 with variance 1
 }
-

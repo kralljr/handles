@@ -56,4 +56,3 @@ apca(nycdat)
 apca(nycdat, tots = pm)
 apca(nycdat, mdl = nycmdl, adjust = "substitute")
 }
-

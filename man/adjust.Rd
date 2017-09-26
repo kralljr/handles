@@ -57,4 +57,3 @@ adjust(nycdat, mdl = nycmdl, adjust = "substitute", sub = 1/sqrt(2))
 adjust(nycdat, mdl = nycmdl, adjust = "exclude", experc = 0.2)
 adjust(nycdat, mdl = nycmdl, adjust = "likelihood", dattype = "lognormal")
 }
-

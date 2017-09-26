@@ -17,4 +17,3 @@ snrat(dat, mdl, unc)
 \code{snrat} adjusts censored concentrations below the MDL using signal
 to noise ratio approach for inflating uncertainty in PMF
 }
-

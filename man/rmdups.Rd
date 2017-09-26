@@ -16,4 +16,3 @@ rmdups(profile, class, probs, k, sprofiles = speciate)
 \description{
 \code{rmdups} reassigns classification for duplicate classifications
 }
-

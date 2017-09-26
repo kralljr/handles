@@ -16,4 +16,3 @@ classify(profile, k = 10, sprofiles = speciate)
 \description{
 \code{classify} classifies profiles according to speciate for simulation study
 }
-

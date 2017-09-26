@@ -3,6 +3,7 @@
 \docType{data}
 \name{nydat}
 \alias{nydat}
+\alias{nydat}
 \title{PM2.5 chemical constituent concentrations in New York City}
 \format{A data frame with 174 rows and 32 variables}
 \description{
@@ -34,4 +35,3 @@ for 30 chemical constituents of PM2.5.  The variables are:
 }
 }
 \keyword{datasets}
-
