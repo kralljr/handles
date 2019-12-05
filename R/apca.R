@@ -47,8 +47,8 @@ apca.default <- function(data, tots = NULL,
 		data <- adj1$dat
 	}	
 		
-	if(class(data[, 1]) != "Date") {
-		stop("First column must be 'date'")
+	if(class(data[, 1]) == "numeric") {
+		stop("First column must not be numeric")
 	}
 		
 	dates <- data[, 1]
@@ -367,7 +367,9 @@ plot.apca <- function(x, plot = "prof", names = NULL,
 		for(i in 1 : length(names)) {
 			plot(dates, conc[, names[i]], type = "l", axes = F, 
 				xlab = "", ylab = "Concentration", main = names[i])
-			axis.Date(1, dates, las = 2, format = "%m/%Y")
+			#axis.Date(1, dates, las = 2, format = "%m/%Y")
+		  
+		  axis.Date(1, dates, las = 2)
 			axis(2)
 			box()
 			abline(h = 0, col = "blue", lty = 2)
